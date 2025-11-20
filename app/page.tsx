@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useMemo, useRef, useCallback, Component } from 'react';
 import { 
   ArrowUpRight, 
@@ -88,11 +90,13 @@ const formatTimeAgo = (timestamp: number) => {
   return `${Math.floor(minutes / 60)}h`;
 };
 
-// GEMINI API UTILITY (Robust Simulation Mode)
-const apiKey = ""; 
+// GEMINI API UTILITY (Safe Environment Access)
+// We use a safe check for 'process' to prevent errors in browser-only environments
+const apiKey = typeof process !== 'undefined' && process.env ? process.env.NEXT_PUBLIC_GEMINI_API_KEY : "";
 
 const callGemini = async (prompt: string) => {
   try {
+    // If key is missing or empty, throw error to trigger simulation mode immediately
     if (!apiKey) throw new Error("No API Key provided (Simulation Mode)");
 
     const response = await fetch(
@@ -441,32 +445,6 @@ const RecentTrades = () => {
     </div>
   );
 };
-
-const TerminalSection = () => (
-  <div className="flex flex-col h-full animate-in fade-in zoom-in-95 duration-300 gap-4">
-    <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg flex justify-between items-center shrink-0">
-      <div className="flex items-center gap-4">
-        <img src={`https://api.dicebear.com/7.x/shapes/svg?seed=PEPE`} className="w-10 h-10 rounded bg-zinc-800" />
-        <div>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">PEPE <Badge variant="success">Live</Badge></h2>
-          <div className="flex items-center gap-2 text-xs text-zinc-400"><span>Pair: PEPE/SOL</span><span className="text-emerald-400">+12.4%</span></div>
-        </div>
-      </div>
-      <div className="flex gap-6 text-sm">
-        <div><div className="text-zinc-500 text-xs">Price</div><div className="font-mono font-bold">0.0042069 SOL</div></div>
-        <div><div className="text-zinc-500 text-xs">24h Vol</div><div className="font-mono text-white">$1.2M</div></div>
-        <div><div className="text-zinc-500 text-xs">Liquidity</div><div className="font-mono text-white">$420K</div></div>
-      </div>
-    </div>
-    <div className="flex-1 flex gap-4 min-h-0">
-      <Card className="flex-1 bg-zinc-900/50 min-w-0"><TerminalChart /><RecentTrades /></Card>
-      <div className="w-80 flex flex-col gap-4 shrink-0">
-        <Card className="flex-1 bg-zinc-900/50 flex-row overflow-hidden"><OrderBook /></Card>
-        <Card className="bg-zinc-900/50 shrink-0"><TradeForm /></Card>
-      </div>
-    </div>
-  </div>
-);
 
 /**
  * ---------------------------------------------------------------------
