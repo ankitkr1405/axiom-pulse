@@ -237,7 +237,7 @@ class ErrorBoundary extends Component<{children: React.ReactNode}, {hasError: bo
 
 /**
  * ---------------------------------------------------------------------
- * SECTION 3: PORTFOLIO & TERMINAL (MOVED OUTSIDE MAIN COMPONENT)
+ * SECTION 3: PORTFOLIO & TERMINAL COMPONENTS
  * ---------------------------------------------------------------------
  */
 
